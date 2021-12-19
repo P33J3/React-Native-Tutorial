@@ -5,6 +5,8 @@ import Home from './HomeComponent';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import CampsiteInfo from './CampsiteInfoComponent';
+import About from './AboutComponent';
+import Contact from './ContactComponent';
 import  Constants  from 'expo-constants';
 import { View, Platform } from 'react-native';
 import { createAppContainer } from 'react-navigation';
@@ -52,13 +54,54 @@ const HomeNavigator = createStackNavigator(
     }
 );
 
+const AboutNavigator = createStackNavigator(
+    {
+        //the components available for the stack
+        About: { screen: About }
+
+    },
+    {
+        // initialRoutineName: 'Directory', (disabled because there is only one screen)
+        defaultNavigationOptions: {
+            headerStyle: {
+                backgroundColor: '#5637DD'
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                color: '#fff'
+            }
+        }
+    }
+);
+
+const ContactNavigator = createStackNavigator(
+    {
+        //the components available for the stack
+        Contact: { screen: Contact }
+
+    },
+    {
+        // initialRoutineName: 'Directory', (disabled because there is only one screen)
+        defaultNavigationOptions: {
+            headerStyle: {
+                backgroundColor: '#5637DD'
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                color: '#fff'
+            }
+        }
+    }
+);
 //will return a component that handles connecting the top navigator to the react native
 //const AppNavigator = createAppContainer(DirectoryNavigator);
 
 const MainNavigator = createDrawerNavigator(
     {
         Home: { screen: HomeNavigator },
-        Directory: { screen: DirectoryNavigator }
+        Directory: { screen: DirectoryNavigator },
+        About: { screen: AboutNavigator},
+        Contact: { screen: ContactNavigator}
     },
     {
         drawerBackgroundColor: '#CEC8FF'
