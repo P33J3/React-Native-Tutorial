@@ -3,13 +3,15 @@ import Directory from './DirectoryComponent';
 import Home from './HomeComponent';
 //import { CAMPSITES } from '../shared/campsites';
 import { createStackNavigator } from 'react-navigation-stack';
-import { createDrawerNavigator } from 'react-navigation-drawer';
+import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
 import CampsiteInfo from './CampsiteInfoComponent';
 import About from './AboutComponent';
 import Contact from './ContactComponent';
 import  Constants  from 'expo-constants';
-import { View, Platform } from 'react-native';
+import { View, Platform, StyleSheet, Text, ScrollView, Image } from 'react-native';
 import { createAppContainer } from 'react-navigation';
+import { Icon } from 'react-native-elements';
+import SafeAreaView from 'react-native-safe-area-view';
 
 
 
@@ -17,7 +19,16 @@ import { createAppContainer } from 'react-navigation';
 const DirectoryNavigator = createStackNavigator( 
     {
         //the components available for the stack
-        Directory: { screen: Directory },
+        Directory: { screen: Directory,
+                    navigationOptions: ({navigation}) => ({
+                        headerLeft: <Icon
+                                        name='list'
+                                        type='font-awesome'
+                                        iconStyle={styles.stackIcon}
+                                        onPress={() => navigation.toggleDrawer()}
+                                        />
+                    })
+                 },
         CampsiteInfo: { screen: CampsiteInfo }
     },
     {
@@ -42,15 +53,21 @@ const HomeNavigator = createStackNavigator(
     },
     {
         // initialRoutineName: 'Directory', (disabled because there is only one screen)
-        defaultNavigationOptions: {
+        defaultNavigationOptions: ({navigation}) => ({
             headerStyle: {
                 backgroundColor: '#5637DD'
             },
             headerTintColor: '#fff',
             headerTitleStyle: {
                 color: '#fff'
-            }
-        }
+            },
+            headerLeft: <Icon
+                            name='home'
+                            type='font-awesome'
+                            iconStyle={styles.stackIcon}
+                            onPress={() => navigation.toggleDrawer()}
+                         />
+        })
     }
 );
 
@@ -62,15 +79,30 @@ const AboutNavigator = createStackNavigator(
     },
     {
         // initialRoutineName: 'Directory', (disabled because there is only one screen)
-        defaultNavigationOptions: {
+        // defaultNavigationOptions: {
+        //     headerStyle: {
+        //         backgroundColor: '#5637DD'
+        //     },
+        //     headerTintColor: '#fff',
+        //     headerTitleStyle: {
+        //         color: '#fff'
+        //     }
+        // }
+        defaultNavigationOptions: ({navigation}) => ({
             headerStyle: {
                 backgroundColor: '#5637DD'
             },
             headerTintColor: '#fff',
             headerTitleStyle: {
                 color: '#fff'
-            }
-        }
+            },
+            headerLeft: <Icon
+                            name='info-circle'
+                            type='font-awesome'
+                            iconStyle={styles.stackIcon}
+                            onPress={() => navigation.toggleDrawer()}
+                         />
+        })
     }
 );
 
@@ -82,31 +114,129 @@ const ContactNavigator = createStackNavigator(
     },
     {
         // initialRoutineName: 'Directory', (disabled because there is only one screen)
-        defaultNavigationOptions: {
+        // defaultNavigationOptions: {
+        //     headerStyle: {
+        //         backgroundColor: '#5637DD'
+        //     },
+        //     headerTintColor: '#fff',
+        //     headerTitleStyle: {
+        //         color: '#fff'
+        //     }
+        // }
+        defaultNavigationOptions: ({navigation}) => ({
             headerStyle: {
                 backgroundColor: '#5637DD'
             },
             headerTintColor: '#fff',
             headerTitleStyle: {
                 color: '#fff'
-            }
-        }
+            },
+            headerLeft: <Icon
+                            name='address-card'
+                            type='font-awesome'
+                            iconStyle={styles.stackIcon}
+                            onPress={() => navigation.toggleDrawer()}
+                         />
+        })
     }
 );
-//will return a component that handles connecting the top navigator to the react native
-//const AppNavigator = createAppContainer(DirectoryNavigator);
+
+const CustomDrawerContentComponent = props => (
+    <ScrollView>
+        {/* SafeAreaView is neccessary for iphone X because of its design. It is automatically included in drawer but we overrided
+        the default so we have to manually add it. */}
+        <SafeAreaView
+            style={styles.createAppContainer}
+            forceInset={{top: 'always', horizontal: 'never'}}
+        >
+            <View style={styles.drawerHeader}>
+                <View style={{flex: 1}}>
+                    <Image
+                        source={require('./images/logo.png')}
+                        style={styles.drawerImage}
+                    />
+                </View>
+                <View style={{flex: 2}}>
+                    <Text
+                        styles={styles.drawerHeader}
+                    >
+                        NuCamp
+                    </Text>
+                </View>
+            </View>
+            <DrawerItems {...props} />
+        </SafeAreaView>
+    </ScrollView>
+)
+
+
 
 const MainNavigator = createDrawerNavigator(
     {
-        Home: { screen: HomeNavigator },
-        Directory: { screen: DirectoryNavigator },
-        About: { screen: AboutNavigator},
-        Contact: { screen: ContactNavigator}
+        Home: { 
+            screen: HomeNavigator,
+            navigationOptions: {
+                drawerIcon: ({tintColor}) => (
+                    <Icon
+                        name='home'
+                        type='font-awesome'
+                        size={24}
+                        color={tintColor}
+                    />
+                )
+            }
+        },
+        Directory: {
+             screen: DirectoryNavigator,
+             navigationOptions: {
+                drawerIcon: ({tintColor}) => (
+                    <Icon
+                        name='LIST'
+                        type='font-awesome'
+                        size={24}
+                        color={tintColor}
+                    />
+                )
+            }
+         },
+        About: { 
+            screen: AboutNavigator,
+            navigationOptions: {
+                drawerLabel: 'About Us',
+                drawerIcon: ({tintColor}) => (
+                    <Icon
+                        name='info-circle'
+                        type='font-awesome'
+                        size={24}
+                        color={tintColor}
+                    />
+                )
+            }
+        },
+        Contact: { 
+            screen: ContactNavigator,
+            navigationOptions: {
+                drawerLabel: 'Contact Us',
+                drawerIcon: ({tintColor}) => (
+                    <Icon
+                        name='address-card'
+                        type='font-awesome'
+                        size={24}
+                        color={tintColor}
+                    />
+                )
+            }
+        }
     },
     {
-        drawerBackgroundColor: '#CEC8FF'
+        drawerBackgroundColor: '#CEC8FF',
+        contentComponent: CustomDrawerContentComponent
     }
 );
+
+//will return a component that handles connecting the top navigator to the react native
+//const AppNavigator = createAppContainer(DirectoryNavigator);
+
 //MainNavigator has replaced DirectoryNavigator as the top level navigator.
 const AppNavigator = createAppContainer(MainNavigator);
 class Main extends Component {
@@ -142,5 +272,34 @@ class Main extends Component {
         )
     }
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
+    drawerHeader: {
+        backgroundColor: '#5637DD',
+        height: 140,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        flexDirection: 'row'
+    },
+    drawerHeaderText: {
+        color: '#fff',
+        fontSize: 24,
+        fontWeight: 'bold'
+    },
+    drawerImage: {
+        margin: 10,
+        height: 60,
+        width: 60
+    },
+    stackIcon: {
+            marginLeft: 10,
+            color: '#fff',
+            fontSize: 24
+    }
+});
 
 export default Main;
