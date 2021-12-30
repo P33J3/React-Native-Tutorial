@@ -6,6 +6,7 @@ import { Card } from 'react-native-elements';
 // import { PARTNERS } from '../shared/partners';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
+import Loading from './LoadingComponent';
 
 
 const mapStateToProps = state => {
@@ -16,8 +17,22 @@ const mapStateToProps = state => {
     };
 };
 
+//changed the passed in 'item' variable (destructured) to props so that attributes more than just item's can be accessed.
+// destructured props inside the function to get item so that existing code still works 
+function RenderItem(props) {
+    const {item} = props;
 
-function RenderItem({item}) {
+    if (props.isLoading) {
+        return <Loading />;
+    }
+    if (props.errMess) {
+        return (
+            <View>
+                <Text>{props.errMess}</Text>
+            </View>
+        );
+    };
+
     if (item) {
         return (
             <Card
@@ -57,12 +72,18 @@ class Home extends Component {
             <ScrollView>
                 <RenderItem
                     item={this.props.campsites.campsites.filter(campsite => campsite.featured)[0]}
+                    isLoading={this.props.campsites.isLoading}
+                    errMess={this.props.campsites.errMess}
                 />
                 <RenderItem
                     item={this.props.promotions.promotions.filter(promotion => promotion.featured)[0]}
+                    isLoading={this.props.promotions.isLoading}
+                    errMess={this.props.promotions.errMess}
                 />
                 <RenderItem
                     item={this.props.partners.partners.filter(partner => partner.featured)[0]}
+                    isLoading={this.props.partners.isLoading}
+                    errMess={this.props.partners.errMess}
                 />
             </ScrollView>
         );
