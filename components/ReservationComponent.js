@@ -31,6 +31,8 @@ class Reservation extends Component {
         this.toggleModal();
     }
 
+    
+
     resetForm() {
         this.setState({
             campers: 1,

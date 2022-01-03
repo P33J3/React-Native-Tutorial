@@ -8,6 +8,7 @@ import CampsiteInfo from './CampsiteInfoComponent';
 import About from './AboutComponent';
 import Contact from './ContactComponent';
 import Reservation from './ReservationComponent';
+import Favorites from './FavoritesComponent';
 import  Constants  from 'expo-constants';
 import { View, Platform, StyleSheet, Text, ScrollView, Image } from 'react-native';
 import { createAppContainer } from 'react-navigation';
@@ -178,6 +179,32 @@ const ReservationNavigator = createStackNavigator(
     }
 );
 
+const FavoritesNavigator = createStackNavigator(
+    {
+        //the components available for the stack
+        Favorites: { screen: Favorites }
+
+    },
+    {
+      
+        defaultNavigationOptions: ({navigation}) => ({
+            headerStyle: {
+                backgroundColor: '#5637DD'
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                color: '#fff'
+            },
+            headerLeft: <Icon
+                            name='heart'
+                            type='font-awesome'
+                            iconStyle={styles.stackIcon}
+                            onPress={() => navigation.toggleDrawer()}
+                         />
+        })
+    }
+);
+
 const CustomDrawerContentComponent = props => (
     <ScrollView>
         {/* SafeAreaView is neccessary for iphone X because of its design. It is automatically included in drawer but we overrided
@@ -243,6 +270,20 @@ const MainNavigator = createDrawerNavigator(
                drawerIcon: ({tintColor}) => (
                    <Icon
                        name='tree'
+                       type='font-awesome'
+                       size={24}
+                       color={tintColor}
+                   />
+               )
+           }
+        },
+        Favorites: {
+            screen: FavoritesNavigator,
+            navigationOptions: {
+                drawerLabel: 'My Favorites',
+               drawerIcon: ({tintColor}) => (
+                   <Icon
+                       name='heart'
                        type='font-awesome'
                        size={24}
                        color={tintColor}
