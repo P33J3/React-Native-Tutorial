@@ -6,6 +6,7 @@ import { Tile} from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import Loading from './LoadingComponent';
+import * as Animatable from 'react-native-animatable';
 
 
 const mapStateToProps = state => {
@@ -33,18 +34,20 @@ class Directory extends Component {
         const { navigate } = this.props.navigation;
         const renderDirectoryItem = ({item}) => {
             return (
-                <Tile
-                    title={item.name}
-                    caption={item.description}
-                    featured
-                    imageSrc={{uri: baseUrl + item.image}}
-                    // the following take 2 parameters: the screen to navigate to & an optional argument that adds
-                    //extra parameters to the route
-                    onPress={() => navigate ('CampsiteInfo', { campsiteId: item.id })}
-                    //the below was deprecated because the props was moved from the maincomponent
-                    // onPress={() => props.onPress(item.id)}
+                <Animatable.View animation='fadeInRightBig' duration={2000}>
+                    <Tile
+                        title={item.name}
+                        caption={item.description}
+                        featured
+                        imageSrc={{uri: baseUrl + item.image}}
+                        // the following take 2 parameters: the screen to navigate to & an optional argument that adds
+                        //extra parameters to the route
+                        onPress={() => navigate ('CampsiteInfo', { campsiteId: item.id })}
+                        //the below was deprecated because the props was moved from the maincomponent
+                        // onPress={() => props.onPress(item.id)}
 
-                />
+                    />
+                </Animatable.View>
             );
 
         };
