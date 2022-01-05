@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { Text, View, ScrollView, StyleSheet,
-    Picker, Switch, Button, Modal } from 'react-native';
+    Picker, Switch, Button, 
+    // Modal,
+    Alert
+} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import * as Animatable from 'react-native-animatable';
 
 class Reservation extends Component {
 
@@ -13,7 +17,7 @@ class Reservation extends Component {
             hikeIn: false,
             date: new Date(),
             showCalendar: false,
-            showModal: false
+            // showModal: false
         };
     }
 
@@ -21,14 +25,14 @@ class Reservation extends Component {
         title: 'Reserve Campsite'
     }
 
-    toggleModal() {
-        this.setState({showModal: !this.state.showModal});
-    }
+    // toggleModal() {
+    //     this.setState({showModal: !this.state.showModal});
+    // }
 
 
     handleReservation() {
         console.log(JSON.stringify(this.state));
-        this.toggleModal();
+        // this.toggleModal();
     }
 
     
@@ -39,7 +43,7 @@ class Reservation extends Component {
             hikeIn: false,
             date: new Date(),
             showCalendar: false,
-            showModal: false
+            // showModal: false
         });
     }
    
@@ -48,94 +52,121 @@ class Reservation extends Component {
     render() {
         return (
             <ScrollView>
-                <View style={styles.formRow}>
-                    <Text style={styles.formLabel}>Number of Campers</Text>
-                    <Picker
-                        style={styles.formItem}
-                        selectedValue={this.state.campers}
-                        onValueChange={itemValue => this.setState({campers: itemValue})}
-                    >
-                        <Picker.Item label='1' value='1' />
-                        <Picker.Item label='2' value='2' />
-                        <Picker.Item label='3' value='3' />
-                        <Picker.Item label='4' value='4' />
-                        <Picker.Item label='5' value='5' />
-                        <Picker.Item label='6' value='6' />
-                    </Picker>
-                </View>
-                <View style={styles.formRow}>
-                    <Text style={styles.formLabel}>Hike-In?</Text>
-                    <Switch
-                        style={styles.formItem}
-                        value={this.state.hikeIn}
-                        trackColor={{true: '#5637DD', false: null}}
-                        onValueChange={value => this.setState({hikeIn: value})}
-                    />
-                </View>
-                <View style={styles.formRow}>
-                    <Text style={styles.formLabel}>Date</Text>
-                    <Button
-                        onPress={() =>
-                            this.setState(((state) => ({ showCalendar: !state.showCalendar})),
-                            () => {
-                                console.log(this.state.showCalendar);
-                            console.log('test7');
-                            })
-                        }
-                        title={this.state.date.toLocaleDateString('en-US')}
-                        color='#5637DD'
-                        accessibilityLabel='Tap me to select a reservation date'
-                    />
-                </View>
-                        {this.state.showCalendar && (
-                            <DateTimePicker
-                                value={this.state.date}
-                                mode={'date'}
-                                display='default'
-                                onChange={(event, selectedDate) => {
-                                    selectedDate && this.setState({date: selectedDate, showCalendar: false});
-                                }}
-                                style={styles.formItem}
-                            />
-                        )}
-
-                <View style={styles.formRow}>
-                    <Button
-                        onPress={() => this.handleReservation()}
-                        title='Search'
-                        color='#5637DD'
-                        accessibilityLabel='Tap me to search for available campsites to reserve'
-                    />
-                </View>
-                <Modal
-                    animationType='slide'
-                    transparent={false}
-                    visible={this.state.showModal}
-                    onRequestClose={() => this.toggleModal()}
-                >
-                    <View
-                        style={styles.modal}
-                    >
-                        <Text style={styles.modalTitle}>Search Campsite Reservation</Text>
-                        <Text style={styles.modalText}>
-                            Number of Campes: {this.state.campers}
-                        </Text>
-                        <Text style={styles.modalText}>
-                            Hike-In?: {this.state.hikeIn ? 'Yes' : 'No'}
-                        </Text>
-                        <Text style={styles.modalText}>
-                            Date: {this.state.date.toLocaleDateString('en-US')}
-                        </Text>
-                        <Button
-                            onPress={() => {
-                                this.toggleModal();
-                                this.resetForm();
-                            }}
-                            color='#5637DD'
-                            title='close'
+                <Animatable.View animation='zoomIn' duration={2000} delay={1000}>
+                    <View style={styles.formRow}>
+                        <Text style={styles.formLabel}>Number of Campers</Text>
+                        <Picker
+                            style={styles.formItem}
+                            selectedValue={this.state.campers}
+                            onValueChange={itemValue => this.setState({campers: itemValue})}
+                        >
+                            <Picker.Item label='1' value='1' />
+                            <Picker.Item label='2' value='2' />
+                            <Picker.Item label='3' value='3' />
+                            <Picker.Item label='4' value='4' />
+                            <Picker.Item label='5' value='5' />
+                            <Picker.Item label='6' value='6' />
+                        </Picker>
+                    </View>
+                    <View style={styles.formRow}>
+                        <Text style={styles.formLabel}>Hike-In?</Text>
+                        <Switch
+                            style={styles.formItem}
+                            value={this.state.hikeIn}
+                            trackColor={{true: '#5637DD', false: null}}
+                            onValueChange={value => this.setState({hikeIn: value})}
                         />
                     </View>
-                </Modal>
+                    <View style={styles.formRow}>
+                        <Text style={styles.formLabel}>Date</Text>
+                        <Button
+                            onPress={() =>
+                                this.setState(((state) => ({ showCalendar: !state.showCalendar})),
+                                () => {
+                                    console.log(this.state.showCalendar);
+                                console.log('test7');
+                                })
+                            }
+                            title={this.state.date.toLocaleDateString('en-US')}
+                            color='#5637DD'
+                            accessibilityLabel='Tap me to select a reservation date'
+                        />
+                    </View>
+                            {this.state.showCalendar && (
+                                <DateTimePicker
+                                    value={this.state.date}
+                                    mode={'date'}
+                                    display='default'
+                                    onChange={(event, selectedDate) => {
+                                        selectedDate && this.setState({date: selectedDate, showCalendar: false});
+                                    }}
+                                    style={styles.formItem}
+                                />
+                            )}
+
+                    <View style={styles.formRow}>
+                        <Button
+                            
+                            title='Search'
+                            color='#5637DD'
+                            accessibilityLabel='Tap me to search for available campsites to reserve'
+                            onPress={() => 
+                                    Alert.alert(
+                                        'Begin Search?',
+                                        'Numbers of Campers:' + this.state.campers + '\n' +
+                                        'Hike-In?:' + `${this.state.hikeIn? 'Yes' : 'No'}` + '\n' +
+                                        'Date:' + this.state.date.toLocaleDateString('en-US'),
+                                        [
+                                            {
+                                                text: 'Cancel',
+                                                onPress: () => console.log( 'Not Deleted'),
+                                                style: 'cancel'
+                                            },
+                                            {
+                                                text: 'OK',
+                                                onPress: () => console.log( 'Not Deleted')
+                                            },
+                                        ],
+                                        //by default alert can be dismissed, this disables that
+                                        { cancelable: false}
+                                    )
+                                }      
+                        />
+                    </View>
+                    {/*<Modal
+                        animationType='slide'
+                        transparent={false}
+                        visible={this.state.showModal}
+                        onRequestClose={() => this.toggleModal()}
+                    >
+                        <View
+                            style={styles.modal}
+                        >
+                            <Text style={styles.modalTitle}>Search Campsite Reservation</Text>
+                            <Text style={styles.modalText}>
+                                Number of Camps: {this.state.campers}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                Hike-In?: {this.state.hikeIn ? 'Yes' : 'No'}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                Date: {this.state.date.toLocaleDateString('en-US')}
+                            </Text>
+                            <Button
+                                onPress={() => {
+                                    this.toggleModal();
+                                    this.resetForm();
+                                }}
+                                color='#5637DD'
+                                title='close'
+                            />
+                        </View>
+                    </Modal>*/}
+                    <View
+                        style={styles.formRow}>
+
+                    </View>
+                </Animatable.View>
             </ScrollView>
         );
     }

@@ -31,6 +31,10 @@ function RenderCampsite(props) {
 
     const recognizeDrag = ({dx}) => (dx < -200) ? true : false;
 
+    const recognizeComment = ({dx}) => (dx > 200) ? true : false;
+
+    
+
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
         onPanResponderGrant: () => {
@@ -57,6 +61,8 @@ function RenderCampsite(props) {
                     ],
                     { cancelable: false}
                 )
+            } else if (recognizeComment(gestureState)) {
+                        props.onShowModal();
             }
             return true;
         }
@@ -268,10 +274,10 @@ const styles = StyleSheet.create({
             flexDirection: 'row',
             margin: 20
     },
-    modal: {
-        justifyContent: 'center',
-        margin: 20
-    }
+    // modal: {
+    //     justifyContent: 'center',
+    //     margin: 20
+    // }
 })
 
 // export default connect(mapStateToProps)(CampsiteInfo);
