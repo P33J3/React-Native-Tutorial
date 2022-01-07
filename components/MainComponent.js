@@ -9,6 +9,7 @@ import About from './AboutComponent';
 import Contact from './ContactComponent';
 import Reservation from './ReservationComponent';
 import Favorites from './FavoritesComponent';
+import Login from './LoginComponent';
 import  Constants  from 'expo-constants';
 import { View, Platform, StyleSheet, Text, ScrollView, Image } from 'react-native';
 import { createAppContainer } from 'react-navigation';
@@ -205,6 +206,32 @@ const FavoritesNavigator = createStackNavigator(
     }
 );
 
+const LoginNavigator = createStackNavigator(
+    {
+        //the components available for the stack
+        Login: { screen: Login }
+
+    },
+    {
+      
+        defaultNavigationOptions: ({navigation}) => ({
+            headerStyle: {
+                backgroundColor: '#5637DD'
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                color: '#fff'
+            },
+            headerLeft: <Icon
+                            name='sign-in'
+                            type='font-awesome'
+                            iconStyle={styles.stackIcon}
+                            onPress={() => navigation.toggleDrawer()}
+                         />
+        })
+    }
+);
+
 const CustomDrawerContentComponent = props => (
     <ScrollView>
         {/* SafeAreaView is neccessary for iphone X because of its design. It is automatically included in drawer but we overrided
@@ -237,6 +264,20 @@ const CustomDrawerContentComponent = props => (
 
 const MainNavigator = createDrawerNavigator(
     {
+
+        Login: { 
+            screen: LoginNavigator,
+            navigationOptions: {
+                drawerIcon: ({tintColor}) => (
+                    <Icon
+                        name='sign-in'
+                        type='font-awesome'
+                        size={24}
+                        color={tintColor}
+                    />
+                )
+            }
+        },
         Home: { 
             screen: HomeNavigator,
             navigationOptions: {
@@ -321,6 +362,7 @@ const MainNavigator = createDrawerNavigator(
         }
     },
     {
+        initialRouteName: 'Home',
         drawerBackgroundColor: '#CEC8FF',
         contentComponent: CustomDrawerContentComponent
     }
